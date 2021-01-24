@@ -1,1 +1,1 @@
-# StudyMore
+# study-more
