@@ -1,6 +1,6 @@
 package io.spring.pind.controller;
 
-import io.spring.pind.ProjectDTO.ProjectDTO;
+import io.spring.pind.dto.ProjectDTO;
 import io.spring.pind.service.ProjectService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
