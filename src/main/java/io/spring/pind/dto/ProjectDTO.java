@@ -1,5 +1,6 @@
-package io.spring.pind.ProjectDTO;
+package io.spring.pind.dto;
 
+import io.spring.pind.entity.ProjectStatus;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -17,5 +18,5 @@ public class ProjectDTO {
 
     private String description;
 
-    private int status;
+    private ProjectStatus status;
 }

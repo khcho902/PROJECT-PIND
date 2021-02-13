@@ -1,6 +1,6 @@
 package io.spring.pind.service;
 
-import io.spring.pind.ProjectDTO.ProjectDTO;
+import io.spring.pind.dto.ProjectDTO;
 import io.spring.pind.entity.Project;
 import java.util.List;
 

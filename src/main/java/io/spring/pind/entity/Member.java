@@ -4,29 +4,36 @@ import lombok.*;
 
 import javax.persistence.*;
 
+import static javax.persistence.FetchType.LAZY;
+
 @Entity
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @ToString
-@Table(name = "s_member")
 public class Member extends BaseEntity {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "member_id")
     private Long id;
 
-    // 추후 지역 table 추가시
-    // private Long region_id;
+    @ManyToOne(fetch = LAZY)
+    @JoinColumn(name = "region_id")
+    private Region region;
 
-    @Column(nullable = false, length = 100)
+    @Column(nullable = false)
     private String email;
 
-    @Column(nullable = false, length = 100)
+    @Column(nullable = false)
     private String password;
 
-    @Column(nullable = false, length = 100)
+    @Column(nullable = false)
     private String name;
+
+    @Enumerated(EnumType.STRING)
+    private FromSocial fromSocial;
 
     public void changeEmail(String email){
         this.email = email;
@@ -39,4 +46,5 @@ public class Member extends BaseEntity {
     public void changeName(String name){
         this.name = name;
     }
+
 }
