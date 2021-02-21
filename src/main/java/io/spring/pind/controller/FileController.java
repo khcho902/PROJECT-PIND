@@ -8,9 +8,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.FileCopyUtils;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
@@ -28,39 +26,12 @@ import java.util.UUID;
 
 @RestController
 @Log4j2
-public class UploadController {
+@RequestMapping("/file")
+public class FileController {
     @Value("${upload.path}")
     private String uploadPath;
 
-    @PostMapping("/uploadFiles")
-    public ResponseEntity<List<UploadResultDTO>> uploadFile(MultipartFile[] uploadFiles){
-        List<UploadResultDTO> resultDTOList = new ArrayList<>();
-        for (MultipartFile uploadFile: uploadFiles) {
-            String originalName = uploadFile.getOriginalFilename();
-            String fileName = originalName.substring(originalName.lastIndexOf("\\") + 1);
-            String folderPath = makeFolder();
-            String uuid = UUID.randomUUID().toString();
-            String saveName = uploadPath + File.separator + folderPath + File.separator + uuid +"_" + fileName;
-            Path savePath = Paths.get(saveName);
-
-            try {
-                uploadFile.transferTo(savePath);
-
-                if(uploadFile.getContentType().startsWith("image") == true) {
-                    String thumbnailSaveName = uploadPath + File.separator + folderPath + File.separator
-                            + "s_" + uuid + "_" + fileName;
-                    File thumbnailFile = new File(thumbnailSaveName);
-                    Thumbnailator.createThumbnail(savePath.toFile(), thumbnailFile, 100, 100);
-                }
-                resultDTOList.add(new UploadResultDTO(fileName,uuid,folderPath));
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-        return new ResponseEntity<>(resultDTOList, HttpStatus.OK);
-    }
-
-    @GetMapping("/display")
+    @GetMapping("")
     public ResponseEntity<byte[]> getFile(String fileName, String size) {
         ResponseEntity<byte[]> result = null;
         try {
@@ -78,8 +49,35 @@ public class UploadController {
         return result;
     }
 
-    @PostMapping("/removeFile")
-    public ResponseEntity<Boolean> removeFile(String fileName){
+    @PostMapping("")
+    public ResponseEntity<List<UploadResultDTO>> createFile(MultipartFile[] uploadFiles){
+        List<UploadResultDTO> resultDTOList = new ArrayList<>();
+        for (MultipartFile uploadFile: uploadFiles) {
+            String originalName = uploadFile.getOriginalFilename();
+            String fileName = originalName.substring(originalName.lastIndexOf("\\") + 1);
+            String folderPath = makeFolder();
+            String uuid = UUID.randomUUID().toString();
+            String saveName = uploadPath + File.separator + folderPath + File.separator + uuid +"_" + fileName;
+            Path savePath = Paths.get(saveName);
+
+            try {
+                uploadFile.transferTo(savePath);
+                if(uploadFile.getContentType().startsWith("image") == true) {
+                    String thumbnailSaveName = uploadPath + File.separator + folderPath + File.separator
+                            + "s_" + uuid + "_" + fileName;
+                    File thumbnailFile = new File(thumbnailSaveName);
+                    Thumbnailator.createThumbnail(savePath.toFile(), thumbnailFile, 100, 100);
+                }
+                resultDTOList.add(new UploadResultDTO(fileName,uuid,folderPath));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        return new ResponseEntity<>(resultDTOList, HttpStatus.OK);
+    }
+
+    @DeleteMapping("")
+    public ResponseEntity<Boolean> deleteFile(String fileName){
 
         String srcFileName = null;
         try {
@@ -88,7 +86,7 @@ public class UploadController {
             String mimeType = Files.probeContentType(file.toPath());
             boolean result = file.delete();
 
-            if(mimeType.startsWith("image") == true) {
+            if (mimeType.startsWith("image") == true) {
                 File thumbnail = new File(file.getParent(), "s_" + file.getName());
                 result = thumbnail.delete();
             }
@@ -113,5 +111,4 @@ public class UploadController {
         }
         return folderPath;
     }
-
 }
