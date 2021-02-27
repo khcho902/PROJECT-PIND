@@ -1,6 +1,8 @@
 package io.spring.pind.repository;
 
 import io.spring.pind.entity.Project;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -9,7 +11,7 @@ import java.util.List;
 
 public interface ProjectRepository extends JpaRepository<Project, Long> {
 
-    @Query("SELECT p, s, r, m, count(pa)" +
+    @Query(value = "SELECT p, s, r, m, count(pa)" +
             " FROM Project p " +
             " LEFT JOIN p.subject s" +
             " LEFT OUTER JOIN p.region r" +
@@ -17,8 +19,10 @@ public interface ProjectRepository extends JpaRepository<Project, Long> {
             " LEFT JOIN Participate pa_tmp on pa_tmp.project = p" +
             " LEFT JOIN pa_tmp.member m" +
             " WHERE pa_tmp.role = 'LEADER'" +
-            " GROUP BY p")
-    List<Object> getProjectAll();
+            " GROUP BY p",
+            countQuery = "SELECT count(p) FROM Project p")
+    Page<Object> getProjectListWithPagination(Pageable pageable);
+
 
     @Query("SELECT p, s, r, m, count(pa)" +
             " FROM Project p " +

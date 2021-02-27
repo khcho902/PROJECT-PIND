@@ -1,12 +1,12 @@
 package io.spring.pind.service;
 
+import io.spring.pind.dto.PageRequestDTO;
+import io.spring.pind.dto.PageResultDTO;
 import io.spring.pind.dto.ProjectDTO;
-
-import java.util.List;
 
 public interface ProjectService {
 
-    List<ProjectDTO> getAllList();
+    PageResultDTO<Object, ProjectDTO> getListWithPagination(PageRequestDTO pageRequestDTO);
 
     ProjectDTO getDetail(Long id);
 

@@ -1,5 +1,7 @@
 package io.spring.pind.controller;
 
+import io.spring.pind.dto.PageRequestDTO;
+import io.spring.pind.dto.PageResultDTO;
 import io.spring.pind.dto.ProjectDTO;
 import io.spring.pind.service.ProjectService;
 import lombok.RequiredArgsConstructor;
@@ -8,7 +10,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -19,10 +20,10 @@ public class ProjectController {
 
     private final ProjectService projectService;
 
-    @GetMapping("/all")
-    public ResponseEntity<List<ProjectDTO>> getAllProject(){
-        List<ProjectDTO> allProjectList = projectService.getAllList();
-        return new ResponseEntity<>(allProjectList, HttpStatus.OK);
+    @GetMapping("/list")
+    public ResponseEntity<PageResultDTO<Object, ProjectDTO>> getListProjectWithPagination(PageRequestDTO pageRequestDTO){
+        PageResultDTO<Object, ProjectDTO> projectListWithPagination = projectService.getListWithPagination(pageRequestDTO);
+        return new ResponseEntity<>(projectListWithPagination, HttpStatus.OK);
     }
 
     @GetMapping("/{project_id}")
