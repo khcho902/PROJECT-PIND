@@ -20,7 +20,7 @@ import static javax.persistence.FetchType.LAZY;
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
-@ToString(exclude = {"participateList", "subject"})  // TODO: 2021/02/13 participateList, subject가 Lazy모드라서 일단 빼둠
+@ToString(exclude = {"participateList", "subject", "region"})
 public class Project extends BaseEntity{
 
     @Id
@@ -46,7 +46,7 @@ public class Project extends BaseEntity{
     @Enumerated(EnumType.STRING)
     private ProjectStatus status;
 
-    @OneToMany(mappedBy = "project")
+    @OneToMany(mappedBy = "project", cascade = CascadeType.ALL)
     final private List<Participate> participateList = new ArrayList<>();
 
     public void changeTitle(String title){
@@ -59,5 +59,13 @@ public class Project extends BaseEntity{
 
     public void changeStatus(ProjectStatus status){
         this.status = status;
+    }
+
+    public void changeRegion(Region region) {
+        this.region = region;
+    }
+
+    public void changeSubject(Subject subject){
+        this.subject = subject;
     }
 }

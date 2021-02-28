@@ -75,12 +75,13 @@ public class AllRepositoryTest {
 
     @Test
     public void project_초기값입력_조회(){
-
         Subject subject = subjectRepository.findById(1L).get();
+        Region region = regionRepository.findById(1L).get();
 
         IntStream.rangeClosed(1, 10).forEach(i -> {
             Project project = Project.builder()
                     .subject(subject)
+                    .region(region)
                     .title(i + "번째 project!!")
                     .description(i + "번째 project 입니다.~~~")
                     .status(ProjectStatus.values()[i % 3]).build();
@@ -95,26 +96,19 @@ public class AllRepositoryTest {
 
     @Test
     public void participate_초기값입력_조회(){
+        for(long projectId = 1; projectId <= 10; projectId++){
+            Project project = projectRepository.findById(projectId).get();
+            for(long memberId = 1; memberId <= 10; memberId++){
+                Member member = memberRepository.findById(memberId).get();
+                ParticipateRole role = projectId == memberId ? ParticipateRole.LEADER : ParticipateRole.MEMBER;
 
-        Project project = projectRepository.findById(1L).get();
-        Member member = memberRepository.findById(1L).get();
-        Participate participate = Participate.builder()
-                .project(project).member(member).role(ParticipateRole.LEADER)
-                .build();
-        participateRepository.save(participate);
-
-        project = projectRepository.findById(1L).get();
-        member = memberRepository.findById(2L).get();
-        participate = Participate.builder()
-                .project(project).member(member).role(ParticipateRole.MEMBER)
-                .build();
-        participateRepository.save(participate);
-
-        project = projectRepository.findById(2L).get();
-        member = memberRepository.findById(3L).get();
-        participate = Participate.builder()
-                .project(project).member(member).role(ParticipateRole.LEADER)
-                .build();
-        participateRepository.save(participate);
+                Participate participate = Participate.builder()
+                        .project(project)
+                        .member(member)
+                        .role(role)
+                        .build();
+                participateRepository.save(participate);
+            }
+        }
     }
 }

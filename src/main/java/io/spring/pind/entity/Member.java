@@ -11,7 +11,7 @@ import static javax.persistence.FetchType.LAZY;
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
-@ToString
+@ToString(exclude = {"region"})
 public class Member extends BaseEntity {
 
     @Id

@@ -21,19 +21,19 @@ public class ProjectController {
 
     @GetMapping("/all")
     public ResponseEntity<List<ProjectDTO>> getAllProject(){
-        List<ProjectDTO> projectDTOList = projectService.getList();
-        return new ResponseEntity<>(projectDTOList, HttpStatus.OK);
+        List<ProjectDTO> allProjectList = projectService.getAllList();
+        return new ResponseEntity<>(allProjectList, HttpStatus.OK);
     }
 
     @GetMapping("/{project_id}")
     public ResponseEntity<ProjectDTO> getProject(@PathVariable("project_id") Long projectId){
-        ProjectDTO projectDTO = projectService.get(projectId);
+        ProjectDTO projectDTO = projectService.getDetail(projectId);
         return new ResponseEntity<>(projectDTO, HttpStatus.OK);
     }
 
     @PostMapping("")
-    public ResponseEntity<Map<String, String>> registerProject(@RequestBody ProjectDTO projectDTO){
-        String projectTitle = projectService.register(projectDTO);
+    public ResponseEntity<Map<String, String>> createProject(@RequestBody ProjectDTO projectDTO){
+        String projectTitle = projectService.create(projectDTO);
         Map<String, String> result = new HashMap<>();
         result.put("projectTitle", projectTitle);
         return new ResponseEntity<>(result, HttpStatus.OK);
@@ -41,7 +41,7 @@ public class ProjectController {
 
     @PutMapping("")
     public ResponseEntity<Map<String, String>> modifyProject(@RequestBody ProjectDTO projectDTO){
-        String projectTitle = projectService.modify(projectDTO);
+        String projectTitle = projectService.modifyContent(projectDTO);
         Map<String, String> result = new HashMap<>();
         result.put("projectTitle", projectTitle);
         return new ResponseEntity<>(result, HttpStatus.OK);
