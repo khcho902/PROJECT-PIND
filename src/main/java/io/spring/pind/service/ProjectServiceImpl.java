@@ -30,7 +30,7 @@ public class ProjectServiceImpl implements ProjectService {
 
     @Transactional(readOnly = true)
     @Override
-    public PageResultDTO<Object, ProjectDTO> getListWithPagination(PageRequestDTO pageRequestDTO) {
+    public PageResultDTO<Object, ProjectDTO> searchProjectListWithPagination(PageRequestDTO pageRequestDTO) {
 
         Function<Object, ProjectDTO> fn = (ProjectDTO::selectProjectResultToDTO);
 
@@ -54,17 +54,17 @@ public class ProjectServiceImpl implements ProjectService {
     @Override
     public String create(ProjectDTO projectDTO) {
 
-        String title = projectDTO.getTitle();
-        String description = projectDTO.getDescription();
         Subject subject = subjectRepository.findById(projectDTO.getSubject().getId()).get();
         Region region = regionRepository.findById(projectDTO.getRegion().getId()).get();
 
         Project newProject = Project.builder()
-                .title(title)
-                .description(description)
+                .title(projectDTO.getTitle())
+                .description(projectDTO.getDescription())
                 .status(ProjectStatus.RECRUIT)
                 .subject(subject)
                 .region(region)
+                .startDate(projectDTO.getStartDate())
+                .maxParticiateNum(projectDTO.getMaxParticipateNum())
                 .build();
 
         Member leader = memberRepository.findById(projectDTO.getLeader().getId()).get();
@@ -94,6 +94,8 @@ public class ProjectServiceImpl implements ProjectService {
             project.changeStatus(projectDTO.getStatus());
             project.changeRegion(region);
             project.changeSubject(subject);
+            project.changeStartDate(projectDTO.getStartDate());
+            project.changeMaxParticipateNum(projectDTO.getMaxParticipateNum());
 
             return project.getTitle();
         }

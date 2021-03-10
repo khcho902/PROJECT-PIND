@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.IntStream;
 
@@ -84,7 +85,10 @@ public class AllRepositoryTest {
                     .region(region)
                     .title(i + "번째 project!!")
                     .description(i + "번째 project 입니다.~~~")
-                    .status(ProjectStatus.values()[i % 3]).build();
+                    .status(ProjectStatus.values()[i % 3])
+                    .maxParticiateNum(100L)
+                    .startDate(LocalDateTime.now().plusMonths(1))
+                    .build();
             projectRepository.save(project);
         });
 

@@ -7,12 +7,11 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
-import org.hibernate.annotations.ColumnDefault;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-import static javax.persistence.FetchType.EAGER;
 import static javax.persistence.FetchType.LAZY;
 
 @Entity
@@ -42,6 +41,12 @@ public class Project extends BaseEntity{
     @Column(length = 1000)
     private String description;
 
+    @Column(name = "start_date", nullable = false)
+    private LocalDateTime startDate;
+
+    @Column(name = "max_participate_num", nullable = false)
+    private Long maxParticiateNum;
+
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     private ProjectStatus status;
@@ -67,5 +72,13 @@ public class Project extends BaseEntity{
 
     public void changeSubject(Subject subject){
         this.subject = subject;
+    }
+
+    public void changeStartDate(LocalDateTime startDate){
+        this.startDate = startDate;
+    }
+
+    public void changeMaxParticipateNum(Long maxParticiateNum){
+        this.maxParticiateNum = maxParticiateNum;
     }
 }
