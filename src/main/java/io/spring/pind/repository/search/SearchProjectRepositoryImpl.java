@@ -48,17 +48,17 @@ public class SearchProjectRepositoryImpl extends QuerydslRepositorySupport imple
         booleanBuilder.and(expression);
 
         if (type != null){
-            String[] typeArr = type.split("");
+            String[] typeArr = type.split("-");
             BooleanBuilder conditionBuilder = new BooleanBuilder();
             for(String t :typeArr){
                 switch(t){
-                    case "t":
+                    case "title":
                         conditionBuilder.or(project.title.contains(keyword));
                         break;
-                    case "d":
+                    case "description":
                         conditionBuilder.or(project.description.contains(keyword));
                         break;
-                    case "l":
+                    case "leader":
                         conditionBuilder.or(member.name.contains(keyword));
                         break;
                 }
