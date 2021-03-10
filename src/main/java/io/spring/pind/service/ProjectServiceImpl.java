@@ -34,7 +34,11 @@ public class ProjectServiceImpl implements ProjectService {
 
         Function<Object, ProjectDTO> fn = (ProjectDTO::selectProjectResultToDTO);
 
-        Page<Object> result = projectRepository.getProjectListWithPagination(pageRequestDTO.getPageable(Sort.by("id").descending()));
+        Page<Object> result = projectRepository.searchProjectListWithPagination(
+                pageRequestDTO.getType(),
+                pageRequestDTO.getKeyword(),
+                pageRequestDTO.getPageable(Sort.by("id").descending()));
+
         return new PageResultDTO<>(result, fn);
     }
 
