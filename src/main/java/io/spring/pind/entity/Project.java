@@ -35,6 +35,10 @@ public class Project extends BaseEntity{
     @JoinColumn(name = "region_id")
     private Region region;
 
+    @OneToOne(fetch = LAZY, cascade = CascadeType.ALL)
+    @JoinColumn(name = "image_id")
+    private Image image;
+
     @Column(nullable = false)
     private String title;
 
