@@ -58,7 +58,7 @@ public class AllRepositoryTest {
 
     @Test
     public void member_초기값입력_조회(){
-        IntStream.rangeClosed(1, 10).forEach(i -> {
+        IntStream.rangeClosed(1, 50).forEach(i -> {
             Member member = Member.builder()
                     .email("member" + i + "@gmail.com")
                     .password("1111")
@@ -78,7 +78,7 @@ public class AllRepositoryTest {
         Subject subject = subjectRepository.findById(1L).get();
         Region region = regionRepository.findById(1L).get();
 
-        IntStream.rangeClosed(1, 10).forEach(i -> {
+        IntStream.rangeClosed(1, 50).forEach(i -> {
             Project project = Project.builder()
                     .subject(subject)
                     .region(region)
@@ -95,10 +95,10 @@ public class AllRepositoryTest {
     }
 
     @Test
-    public void participate_초기값입력_조회(){
-        for(long projectId = 1; projectId <= 10; projectId++){
+    public void participate_초기값입력(){
+        for(long projectId = 1; projectId <= 50; projectId++){
             Project project = projectRepository.findById(projectId).get();
-            for(long memberId = 1; memberId <= 10; memberId++){
+            for(long memberId = 1; memberId <= 50; memberId++){
                 Member member = memberRepository.findById(memberId).get();
                 ParticipateRole role = projectId == memberId ? ParticipateRole.LEADER : ParticipateRole.MEMBER;
 

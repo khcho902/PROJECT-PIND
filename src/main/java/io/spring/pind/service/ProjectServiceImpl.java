@@ -1,5 +1,7 @@
 package io.spring.pind.service;
 
+import io.spring.pind.dto.PageRequestDTO;
+import io.spring.pind.dto.PageResultDTO;
 import io.spring.pind.dto.ProjectDTO;
 import io.spring.pind.entity.*;
 import io.spring.pind.repository.MemberRepository;
@@ -8,12 +10,13 @@ import io.spring.pind.repository.RegionRepository;
 import io.spring.pind.repository.SubjectRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
+import java.util.function.Function;
 
 @Service
 @Log4j2
@@ -27,13 +30,12 @@ public class ProjectServiceImpl implements ProjectService {
 
     @Transactional(readOnly = true)
     @Override
-    public List<ProjectDTO> getAllList() {
+    public PageResultDTO<Object, ProjectDTO> getListWithPagination(PageRequestDTO pageRequestDTO) {
 
-        List<ProjectDTO> projectAllList = new ArrayList<>();
-        projectRepository.getProjectAll().forEach(selectResult -> {
-            projectAllList.add(ProjectDTO.selectProjectResultToDTO(selectResult));
-        });
-        return projectAllList;
+        Function<Object, ProjectDTO> fn = (ProjectDTO::selectProjectResultToDTO);
+
+        Page<Object> result = projectRepository.getProjectListWithPagination(pageRequestDTO.getPageable(Sort.by("id").descending()));
+        return new PageResultDTO<>(result, fn);
     }
 
     @Transactional(readOnly = true)
