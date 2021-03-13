@@ -6,6 +6,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
+
 @Data
 @Builder
 @NoArgsConstructor
@@ -20,6 +22,8 @@ public class ProjectDTO {
     private RegionDTO region;
     private Long participateNum;
     private MemberDTO leader;
+    private LocalDateTime startDate;
+    private Long maxParticipateNum;
 
     public static ProjectDTO entityToDto(Project project, Subject subject, Region region, Member leader, Long participateNum){
 
@@ -38,6 +42,8 @@ public class ProjectDTO {
                 .subject(subjectDTO)
                 .participateNum(participateNum)
                 .leader(leaderDTO)
+                .startDate(project.getStartDate())
+                .maxParticipateNum(project.getMaxParticiateNum())
                 .build();
         return projectDTO;
     }

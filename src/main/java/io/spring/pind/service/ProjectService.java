@@ -6,7 +6,7 @@ import io.spring.pind.dto.ProjectDTO;
 
 public interface ProjectService {
 
-    PageResultDTO<Object, ProjectDTO> getListWithPagination(PageRequestDTO pageRequestDTO);
+    PageResultDTO<Object, ProjectDTO> searchProjectListWithPagination(PageRequestDTO pageRequestDTO);
 
     ProjectDTO getDetail(Long id);
 

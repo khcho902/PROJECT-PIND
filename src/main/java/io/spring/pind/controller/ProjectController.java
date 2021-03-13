@@ -21,8 +21,8 @@ public class ProjectController {
     private final ProjectService projectService;
 
     @GetMapping("/list")
-    public ResponseEntity<PageResultDTO<Object, ProjectDTO>> getListProjectWithPagination(PageRequestDTO pageRequestDTO){
-        PageResultDTO<Object, ProjectDTO> projectListWithPagination = projectService.getListWithPagination(pageRequestDTO);
+    public ResponseEntity<PageResultDTO<Object, ProjectDTO>> searchProjectListWithPagination(PageRequestDTO pageRequestDTO){
+        PageResultDTO<Object, ProjectDTO> projectListWithPagination = projectService.searchProjectListWithPagination(pageRequestDTO);
         return new ResponseEntity<>(projectListWithPagination, HttpStatus.OK);
     }
 
