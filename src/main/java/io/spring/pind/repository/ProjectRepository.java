@@ -8,10 +8,11 @@ import org.springframework.data.repository.query.Param;
 
 public interface ProjectRepository extends JpaRepository<Project, Long>, SearchProjectRepository {
 
-    @Query("SELECT p, s, r, m, count(pa)" +
+    @Query("SELECT p, s, r, i, m, count(pa)" +
             " FROM Project p " +
             " LEFT JOIN p.subject s" +
             " LEFT OUTER JOIN p.region r" +
+            " LEFT OUTER JOIN p.image i" +
             " LEFT JOIN Participate pa ON pa.project = p" +
             " LEFT JOIN Participate pa_tmp on pa_tmp.project = p" +
             " LEFT JOIN pa_tmp.member m" +

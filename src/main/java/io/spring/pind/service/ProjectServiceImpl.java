@@ -4,10 +4,7 @@ import io.spring.pind.dto.PageRequestDTO;
 import io.spring.pind.dto.PageResultDTO;
 import io.spring.pind.dto.ProjectDTO;
 import io.spring.pind.entity.*;
-import io.spring.pind.repository.MemberRepository;
-import io.spring.pind.repository.ProjectRepository;
-import io.spring.pind.repository.RegionRepository;
-import io.spring.pind.repository.SubjectRepository;
+import io.spring.pind.repository.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.data.domain.Page;
@@ -27,6 +24,7 @@ public class ProjectServiceImpl implements ProjectService {
     private final SubjectRepository subjectRepository;
     private final RegionRepository regionRepository;
     private final MemberRepository memberRepository;
+    private final ImageRepository imageRepository;
 
     @Transactional(readOnly = true)
     @Override
@@ -54,6 +52,15 @@ public class ProjectServiceImpl implements ProjectService {
     @Override
     public String create(ProjectDTO projectDTO) {
 
+        Image image = null;
+        if (projectDTO.getImage() != null){
+            image = Image.builder()
+                    .name(projectDTO.getImage().getName())
+                    .path(projectDTO.getImage().getPath())
+                    .uuid(projectDTO.getImage().getUuid())
+                    .build();
+        }
+
         Subject subject = subjectRepository.findById(projectDTO.getSubject().getId()).get();
         Region region = regionRepository.findById(projectDTO.getRegion().getId()).get();
 
@@ -63,6 +70,7 @@ public class ProjectServiceImpl implements ProjectService {
                 .status(ProjectStatus.RECRUIT)
                 .subject(subject)
                 .region(region)
+                .image(image)
                 .startDate(projectDTO.getStartDate())
                 .maxParticiateNum(projectDTO.getMaxParticipateNum())
                 .build();
