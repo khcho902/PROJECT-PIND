@@ -25,6 +25,7 @@ public class ProjectServiceImpl implements ProjectService {
     private final RegionRepository regionRepository;
     private final MemberRepository memberRepository;
     private final ImageRepository imageRepository;
+    private final ReplyRepository replyRepository;
 
     @Transactional(readOnly = true)
     @Override
@@ -110,10 +111,12 @@ public class ProjectServiceImpl implements ProjectService {
         return null;
     }
 
+    @Transactional
     @Override
     public String delete(Long projectId) {
         Optional<Project> result = projectRepository.findById(projectId);
         if (result.isPresent()){
+            replyRepository.deleteByProjectId(projectId);
             projectRepository.deleteById(projectId);
             return result.get().getTitle();
         }

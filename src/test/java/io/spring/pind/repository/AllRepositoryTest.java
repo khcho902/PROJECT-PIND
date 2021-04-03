@@ -22,6 +22,8 @@ public class AllRepositoryTest {
     private ProjectRepository projectRepository;
     @Autowired
     private ParticipateRepository participateRepository;
+    @Autowired
+    private ReplyRepository replyRepository;
 
     @Test
     public void region_초기값입력_조회(){
@@ -112,6 +114,23 @@ public class AllRepositoryTest {
                         .role(role)
                         .build();
                 participateRepository.save(participate);
+            }
+        }
+    }
+
+    @Test
+    public void reply_초기값입력(){
+
+        for(long projectId = 1; projectId <= 5; projectId++){
+            Project project = projectRepository.findById(projectId).get();
+            for(long memberId = 1; memberId <= 5; memberId++){
+                Member member = memberRepository.findById(memberId).get();
+                Reply reply = Reply.builder()
+                        .member(member)
+                        .project(project)
+                        .content("reply written by "+ member.getName())
+                        .build();
+                replyRepository.save(reply);
             }
         }
     }
