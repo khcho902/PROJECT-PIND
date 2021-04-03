@@ -24,7 +24,7 @@ public class ProjectServiceImpl implements ProjectService {
     private final SubjectRepository subjectRepository;
     private final RegionRepository regionRepository;
     private final MemberRepository memberRepository;
-    private final ImageRepository imageRepository;
+    private final FileRepository fileRepository;
 
     @Transactional(readOnly = true)
     @Override
@@ -52,12 +52,12 @@ public class ProjectServiceImpl implements ProjectService {
     @Override
     public String create(ProjectDTO projectDTO) {
 
-        Image image = null;
-        if (projectDTO.getImage() != null){
-            image = Image.builder()
-                    .name(projectDTO.getImage().getName())
-                    .path(projectDTO.getImage().getPath())
-                    .uuid(projectDTO.getImage().getUuid())
+        File file = null;
+        if (projectDTO.getFile() != null){
+            file = File.builder()
+                    .fileName(projectDTO.getFile().getFileName())
+                    .path(projectDTO.getFile().getPath())
+                    .uuid(projectDTO.getFile().getUuid())
                     .build();
         }
 
@@ -70,7 +70,7 @@ public class ProjectServiceImpl implements ProjectService {
                 .status(ProjectStatus.RECRUIT)
                 .subject(subject)
                 .region(region)
-                .image(image)
+                .file(file)
                 .startDate(projectDTO.getStartDate())
                 .maxParticiateNum(projectDTO.getMaxParticipateNum())
                 .build();

@@ -24,13 +24,13 @@ public class ProjectDTO {
     private MemberDTO leader;
     private LocalDateTime startDate;
     private Long maxParticipateNum;
-    private ImageDTO image;
+    private FileDTO file;
 
-    public static ProjectDTO entityToDto(Project project, Subject subject, Region region, Image image, Member leader, Long participateNum){
+    public static ProjectDTO entityToDto(Project project, Subject subject, Region region, File file, Member leader, Long participateNum){
 
         RegionDTO regionDTO = (region == null) ? null : RegionDTO.entityToDto(region);
         SubjectDTO subjectDTO = SubjectDTO.entityToDto(subject);
-        ImageDTO imageDTO = (image == null) ? null : ImageDTO.entityToDto(image);
+        FileDTO fileDTO = (file == null) ? null : FileDTO.entityToDto(file);
         MemberDTO leaderDTO = new MemberDTO();
         leaderDTO.setId(leader.getId());
         leaderDTO.setName(leader.getName());
@@ -42,7 +42,7 @@ public class ProjectDTO {
                 .status(project.getStatus())
                 .region(regionDTO)
                 .subject(subjectDTO)
-                .image(imageDTO)
+                .file(fileDTO)
                 .participateNum(participateNum)
                 .leader(leaderDTO)
                 .startDate(project.getStartDate())
@@ -53,7 +53,7 @@ public class ProjectDTO {
 
     public static ProjectDTO selectProjectResultToDTO(Object res){
         Object[] arr = (Object[])res;
-        return ProjectDTO.entityToDto((Project)arr[0], (Subject)arr[1], (Region)arr[2], (Image)arr[3], (Member)arr[4], (Long)arr[5]);
+        return ProjectDTO.entityToDto((Project)arr[0], (Subject)arr[1], (Region)arr[2], (File)arr[3], (Member)arr[4], (Long)arr[5]);
     }
 
 }

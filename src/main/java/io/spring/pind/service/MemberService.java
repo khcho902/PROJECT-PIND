@@ -23,6 +23,7 @@ public interface MemberService {
                 .id(member.getId())
                 .email(member.getEmail())
                 .name(member.getName())
+                .certifiedKey(member.getCertifiedKey())
                 .regDate(member.getRegDate())
                 .modDate(member.getModDate())
                 .build();

@@ -31,18 +31,18 @@ public class SearchProjectRepositoryImpl extends QuerydslRepositorySupport imple
         QParticipate participateTmp = new QParticipate("participateTmp");
         QRegion region = QRegion.region;
         QSubject subject = QSubject.subject;
-        QImage image = QImage.image;
+        QFile file = QFile.file;
         QMember member = QMember.member;
 
         JPQLQuery<Project> jpqlQuery = from(project);
         jpqlQuery.leftJoin(subject).on(project.subject.eq(subject));
         jpqlQuery.leftJoin(region).on(project.region.eq(region));
-        jpqlQuery.leftJoin(image).on(project.image.eq(image));
+        jpqlQuery.leftJoin(file).on(project.file.eq(file));
         jpqlQuery.leftJoin(participate).on(participate.project.eq(project));
         jpqlQuery.leftJoin(participateTmp).on(participateTmp.project.eq(project));
         jpqlQuery.leftJoin(member).on(participateTmp.member.eq(member));
 
-        JPQLQuery<Tuple> tuple = jpqlQuery.select(project, subject, region, image, member, participate.count());
+        JPQLQuery<Tuple> tuple = jpqlQuery.select(project, subject, region, file, member, participate.count());
 
         BooleanBuilder booleanBuilder = new BooleanBuilder();
 
