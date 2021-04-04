@@ -36,8 +36,8 @@ public class Project extends BaseEntity{
     private Region region;
 
     @OneToOne(fetch = LAZY, cascade = CascadeType.ALL)
-    @JoinColumn(name = "image_id")
-    private Image image;
+    @JoinColumn(name = "file_id")
+    private File file;
 
     @Column(nullable = false)
     private String title;
