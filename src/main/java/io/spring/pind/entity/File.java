@@ -10,15 +10,15 @@ import javax.persistence.*;
 @NoArgsConstructor
 @Getter
 @ToString
-public class Image {
+public class File {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "image_id")
+    @Column(name = "file_id")
     private Long id;
 
     @Column(nullable = false)
-    private String name;
+    private String fileName;
 
     @Column(nullable = false)
     private String path;

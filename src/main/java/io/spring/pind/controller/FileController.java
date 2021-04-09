@@ -1,8 +1,10 @@
 package io.spring.pind.controller;
 
+import io.spring.pind.dto.FileDTO;
 import io.spring.pind.dto.UploadResultDTO;
+import io.spring.pind.service.FileService;
 import lombok.extern.log4j.Log4j2;
-import net.coobird.thumbnailator.Thumbnailator;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -12,14 +14,8 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
-import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -30,6 +26,9 @@ import java.util.UUID;
 public class FileController {
     @Value("${upload.path}")
     private String uploadPath;
+
+    @Autowired
+    private FileService fileService;
 
     @GetMapping("")
     public ResponseEntity<byte[]> getFile(String fileName, String size) {
@@ -53,62 +52,32 @@ public class FileController {
     public ResponseEntity<List<UploadResultDTO>> createFile(MultipartFile[] uploadFiles){
         List<UploadResultDTO> resultDTOList = new ArrayList<>();
         for (MultipartFile uploadFile: uploadFiles) {
-            String originalName = uploadFile.getOriginalFilename();
-            String fileName = originalName.substring(originalName.lastIndexOf("\\") + 1);
-            String folderPath = makeFolder();
-            String uuid = UUID.randomUUID().toString();
-            String saveName = uploadPath + File.separator + folderPath + File.separator + uuid +"_" + fileName;
-            Path savePath = Paths.get(saveName);
-
-            try {
-                uploadFile.transferTo(savePath);
-                if(uploadFile.getContentType().startsWith("image") == true) {
-                    String thumbnailSaveName = uploadPath + File.separator + folderPath + File.separator
-                            + "s_" + uuid + "_" + fileName;
-                    File thumbnailFile = new File(thumbnailSaveName);
-                    Thumbnailator.createThumbnail(savePath.toFile(), thumbnailFile, 100, 100);
-                }
-                resultDTOList.add(new UploadResultDTO(fileName,uuid,folderPath));
-            } catch (IOException e) {
-                e.printStackTrace();
+            UploadResultDTO resultDTO = fileService.createFile(uploadFile);
+            if (resultDTO != null) {
+                resultDTOList.add(resultDTO);
             }
         }
         return new ResponseEntity<>(resultDTOList, HttpStatus.OK);
     }
 
     @DeleteMapping("")
-    public ResponseEntity<Boolean> deleteFile(String fileName){
-
-        String srcFileName = null;
+    public ResponseEntity<Boolean> deleteFile(String fileName) {
         try {
-            srcFileName = URLDecoder.decode(fileName,"UTF-8");
-            File file = new File(uploadPath + File.separator + srcFileName);
-            String mimeType = Files.probeContentType(file.toPath());
-            boolean result = file.delete();
-
-            if (mimeType.startsWith("image") == true) {
-                File thumbnail = new File(file.getParent(), "s_" + file.getName());
-                result = thumbnail.delete();
-            }
+            boolean result = fileService.deleteFile(fileName);
             return new ResponseEntity<>(result, HttpStatus.OK);
-
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-            return new ResponseEntity<>(false, HttpStatus.INTERNAL_SERVER_ERROR);
-        } catch (IOException e) {
+        } catch (Exception e) {
             e.printStackTrace();
             return new ResponseEntity<>(false, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
-    private String makeFolder() {
-        String str = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd"));
-        String folderPath =  str.replace("//", File.separator);
-        File uploadPathFolder = new File(uploadPath, folderPath);
-
-        if (uploadPathFolder.exists() == false) {
-            uploadPathFolder.mkdirs();
-        }
-        return folderPath;
+    @GetMapping("/path")
+    public ResponseEntity<FileDTO> getFilePath(String fileName){
+        FileDTO fileDTO = FileDTO.builder()
+                .fileName(fileName)
+                .path(fileService.makeFolder())
+                .uuid(UUID.randomUUID().toString())
+                .build();
+        return new ResponseEntity<>(fileDTO, HttpStatus.OK);
     }
 }
