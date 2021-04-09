@@ -67,6 +67,7 @@ public class ProjectServiceImpl implements ProjectService {
         Project newProject = Project.builder()
                 .title(projectDTO.getTitle())
                 .description(projectDTO.getDescription())
+                .content(projectDTO.getContent())
                 .status(ProjectStatus.RECRUIT)
                 .subject(subject)
                 .region(region)
@@ -99,6 +100,7 @@ public class ProjectServiceImpl implements ProjectService {
             Project project = result.get();
             project.changeTitle(projectDTO.getTitle());
             project.changeDescription(projectDTO.getDescription());
+            project.changeContent(projectDTO.getContent());
             project.changeStatus(projectDTO.getStatus());
             project.changeRegion(region);
             project.changeSubject(subject);

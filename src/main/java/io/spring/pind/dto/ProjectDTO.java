@@ -17,6 +17,7 @@ public class ProjectDTO {
     private Long id;
     private String title;
     private String description;
+    private String content;
     private ProjectStatus status;
     private SubjectDTO subject;
     private RegionDTO region;
@@ -39,6 +40,7 @@ public class ProjectDTO {
                 .id(project.getId())
                 .title(project.getTitle())
                 .description(project.getDescription())
+                .content(project.getContent())
                 .status(project.getStatus())
                 .region(regionDTO)
                 .subject(subjectDTO)
@@ -55,5 +57,4 @@ public class ProjectDTO {
         Object[] arr = (Object[])res;
         return ProjectDTO.entityToDto((Project)arr[0], (Subject)arr[1], (Region)arr[2], (File)arr[3], (Member)arr[4], (Long)arr[5]);
     }
-
 }
