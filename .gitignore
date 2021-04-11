@@ -40,4 +40,4 @@ out/
 
 application-oauth.properties
 application-credentials.yml
-
+application-prod.properties
