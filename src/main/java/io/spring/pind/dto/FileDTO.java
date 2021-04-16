@@ -4,6 +4,7 @@ import io.spring.pind.entity.File;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.UnsupportedEncodingException;
@@ -20,6 +21,13 @@ public class FileDTO {
     private String path;
 
     private String fileName;
+
+    public FileDTO() {
+        uuid = "";
+        path = "";
+        fileName = "";
+        uploadFile = null;
+    }
 
     public static FileDTO entityToDto(File file) {
         FileDTO fileDTO = FileDTO.builder()

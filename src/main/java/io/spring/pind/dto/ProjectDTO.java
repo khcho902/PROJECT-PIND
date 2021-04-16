@@ -56,4 +56,20 @@ public class ProjectDTO {
         return ProjectDTO.entityToDto((Project)arr[0], (Subject)arr[1], (Region)arr[2], (File)arr[3], (Member)arr[4], (Long)arr[5]);
     }
 
+    @Override
+    public String toString() {
+        return "ProjectDTO{" +
+                "id=" + id +
+                ", title='" + title + '\'' +
+                ", description='" + description + '\'' +
+                ", status=" + status +
+                ", subject=" + subject +
+                ", region=" + region +
+                ", participateNum=" + participateNum +
+                ", leader=" + leader +
+                ", startDate=" + startDate +
+                ", maxParticipateNum=" + maxParticipateNum +
+                ", file=" + file +
+                '}';
+    }
 }
