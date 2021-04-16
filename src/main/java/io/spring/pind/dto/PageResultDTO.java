@@ -37,7 +37,7 @@ public class PageResultDTO<EN, DTO>{
         startPage = tempEnd - 9;
         endPage = Math.min(totalPage, tempEnd);
         prev = startPage > 1;
-        next = endPage == totalPage;
+        next = endPage != totalPage;
 
         pageList = IntStream.rangeClosed(startPage, endPage).boxed().collect(Collectors.toList());
     }

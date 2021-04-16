@@ -57,8 +57,8 @@ public class SearchProjectRepositoryImpl extends QuerydslRepositorySupport imple
                     case "title":
                         conditionBuilder.or(project.title.contains(keyword));
                         break;
-                    case "description":
-                        conditionBuilder.or(project.description.contains(keyword));
+                    case "content":
+                        conditionBuilder.or(project.content.contains(keyword));
                         break;
                     case "leader":
                         conditionBuilder.or(member.name.contains(keyword));

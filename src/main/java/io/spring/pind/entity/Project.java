@@ -45,6 +45,9 @@ public class Project extends BaseEntity{
     @Column(length = 1000)
     private String description;
 
+    @Column(length = 2000)
+    private String content;
+
     @Column(name = "start_date", nullable = false)
     private LocalDateTime startDate;
 
@@ -64,6 +67,10 @@ public class Project extends BaseEntity{
 
     public void changeDescription(String description){
         this.description = description;
+    }
+
+    public void changeContent(String content) {
+        this.content = content;
     }
 
     public void changeStatus(ProjectStatus status){
