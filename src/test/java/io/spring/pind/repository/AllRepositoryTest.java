@@ -4,7 +4,12 @@ import io.spring.pind.entity.*;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.core.io.ClassPathResource;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.IntStream;
@@ -27,14 +32,33 @@ public class AllRepositoryTest {
 
     @Test
     public void region_초기값입력_조회(){
-        Region region1 = Region.builder().regionDepth1("서울시").regionDepth2("마포구").regionDepth3("서교동").build();
-        Region region2 = Region.builder().regionDepth1("서울시").regionDepth2("마포구").regionDepth3("연희동").build();
-        Region region3 = Region.builder().regionDepth1("서울시").regionDepth2("강남구").regionDepth3("역삼동").build();
-        Region region4 = Region.builder().regionDepth1("서울시").regionDepth2("종로구").regionDepth3("부암동").build();
-        regionRepository.save(region1);
-        regionRepository.save(region2);
-        regionRepository.save(region3);
-        regionRepository.save(region4);
+        ClassPathResource resource = new ClassPathResource("region_data/bcode.csv");
+        try {
+            Path path = Paths.get(resource.getURI());
+            List<String> content = Files.readAllLines(path);
+            content.forEach(input -> {
+
+                String[] arr = new String[4];
+                for(int i = 0; i < 4; i++) {
+                    arr[i] = null;
+                }
+
+                String[] inputs = input.split(",");
+                for(int i = 0; i < inputs.length; i++) {
+                    arr[i] = inputs[i];
+                }
+
+                Region region = Region.builder()
+                        .id(Long.valueOf(arr[0]))
+                        .regionDepth1(arr[1])
+                        .regionDepth2(arr[2])
+                        .regionDepth3(arr[3])
+                        .build();
+                regionRepository.save(region);
+            });
+        } catch (IOException e) {
+            System.out.println(e);
+        }
 
         List<Region> list = regionRepository.findAll();
         list.stream().forEach(region -> {
@@ -79,7 +103,7 @@ public class AllRepositoryTest {
     @Test
     public void project_초기값입력_조회(){
         Subject subject = subjectRepository.findById(1L).get();
-        Region region = regionRepository.findById(1L).get();
+        Region region = regionRepository.findById(1168010300L).get();
 
         IntStream.rangeClosed(1, 50).forEach(i -> {
             Project project = Project.builder()
