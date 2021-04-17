@@ -1,7 +1,6 @@
 package io.spring.pind.service;
 
 import io.spring.pind.dto.FileDTO;
-import io.spring.pind.dto.UploadResultDTO;
 import net.coobird.thumbnailator.Thumbnailator;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -33,14 +32,9 @@ public class FileService {
         return folderPath;
     }
 
-    public UploadResultDTO createFile(MultipartFile uploadFile){
-//        String originalName = uploadFile.getOriginalFilename();
-//        String fileName = originalName.substring(originalName.lastIndexOf("\\") + 1);
-//        String folderPath = makeFolder();
-//        String uuid = UUID.randomUUID().toString();
+    public FileDTO createFile(MultipartFile uploadFile){
         String originalName = uploadFile.getOriginalFilename();
         FileDTO fileDTO = FileDTO.builder()
-                .uploadFile(uploadFile)
                 .fileName(originalName.substring(originalName.lastIndexOf("\\") + 1))
                 .path(makeFolder())
                 .uuid(UUID.randomUUID().toString())
@@ -50,14 +44,14 @@ public class FileService {
         Path savePath = Paths.get(saveName);
 
         try {
-            fileDTO.getUploadFile().transferTo(savePath);
-            if(fileDTO.getUploadFile().getContentType().startsWith("image") == true) {
+            uploadFile.transferTo(savePath);
+            if(uploadFile.getContentType().startsWith("image") == true) {
                 String thumbnailSaveName = uploadPath + File.separator + fileDTO.getPath() + File.separator
                         + "s_" + fileDTO.getUuid() + "_" + fileDTO.getFileName();
                 File thumbnailFile = new File(thumbnailSaveName);
                 Thumbnailator.createThumbnail(savePath.toFile(), thumbnailFile, 100, 100);
             }
-            return new UploadResultDTO(fileDTO.getFileName(),fileDTO.getUuid(),fileDTO.getPath() );
+            return fileDTO;
         } catch (IOException e) {
             e.printStackTrace();
         }
