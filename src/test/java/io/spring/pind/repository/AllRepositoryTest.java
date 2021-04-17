@@ -68,10 +68,12 @@ public class AllRepositoryTest {
 
     @Test
     public void subject_초기값입력_조회(){
+        Subject subject0 = Subject.builder().subjectDepth1("프로그래밍").build();
         Subject subject1 = Subject.builder().subjectDepth1("프로그래밍").subjectDepth2("자바").build();
         Subject subject2 = Subject.builder().subjectDepth1("프로그래밍").subjectDepth2("파이썬").build();
         Subject subject3 = Subject.builder().subjectDepth1("프로그래밍").subjectDepth2("루비").build();
         Subject subject4 = Subject.builder().subjectDepth1("프로그래밍").subjectDepth2("자바스크립").build();
+        subjectRepository.save(subject0);
         subjectRepository.save(subject1);
         subjectRepository.save(subject2);
         subjectRepository.save(subject3);
