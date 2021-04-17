@@ -1,9 +1,6 @@
 package io.spring.pind.controller;
 
-import io.spring.pind.dto.PageRequestDTO;
-import io.spring.pind.dto.PageResultDTO;
-import io.spring.pind.dto.ProjectDTO;
-import io.spring.pind.dto.UploadResultDTO;
+import io.spring.pind.dto.*;
 import io.spring.pind.service.FileService;
 import io.spring.pind.service.ProjectService;
 import lombok.RequiredArgsConstructor;
@@ -11,6 +8,8 @@ import lombok.extern.log4j.Log4j2;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -36,12 +35,10 @@ public class ProjectController {
     }
 
     @PostMapping("")
-    public ResponseEntity<Map<String, String>> createProject(@RequestBody ProjectDTO projectDTO){
-        if (projectDTO.getFile() != null){
-            UploadResultDTO uploadResultDTO = fileService.createFile(projectDTO.getFile().getUploadFile());
-            projectDTO.getFile().setFileName(uploadResultDTO.getFileName());
-            projectDTO.getFile().setPath(uploadResultDTO.getFolderPath());
-            projectDTO.getFile().setUuid(uploadResultDTO.getUuid());
+    public ResponseEntity<Map<String, String>> createProject(@RequestPart(value = "project") ProjectDTO projectDTO, @RequestPart(value = "file") MultipartFile file){
+        if (file != null){
+            FileDTO fileDTO = fileService.createFile(file);
+            projectDTO.setFile(fileDTO);
         }
         String projectTitle = projectService.create(projectDTO);
 

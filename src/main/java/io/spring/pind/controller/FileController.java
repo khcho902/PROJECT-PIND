@@ -1,7 +1,6 @@
 package io.spring.pind.controller;
 
 import io.spring.pind.dto.FileDTO;
-import io.spring.pind.dto.UploadResultDTO;
 import io.spring.pind.service.FileService;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,10 +48,10 @@ public class FileController {
     }
 
     @PostMapping("")
-    public ResponseEntity<List<UploadResultDTO>> createFile(MultipartFile[] uploadFiles){
-        List<UploadResultDTO> resultDTOList = new ArrayList<>();
+    public ResponseEntity<List<FileDTO>> createFile(MultipartFile[] uploadFiles){
+        List<FileDTO> resultDTOList = new ArrayList<>();
         for (MultipartFile uploadFile: uploadFiles) {
-            UploadResultDTO resultDTO = fileService.createFile(uploadFile);
+            FileDTO resultDTO = fileService.createFile(uploadFile);
             if (resultDTO != null) {
                 resultDTOList.add(resultDTO);
             }
